@@ -132,19 +132,28 @@ def create_overload_graph(
 
     return fig
 
-def create_delay_distribution(
-    schedule_df
-):
+def create_delay_distribution(schedule_df):
 
-    fig, ax = plt.subplots(figsize=(10,4))
+    fig, ax = plt.subplots(figsize=(10, 4))
 
-    ax.hist(
-        schedule_df["TimeSlot"],
-        bins=24
-    )
+    doctors = schedule_df["Doctor"].unique()
 
-    ax.set_title("Patient Delay Distribution")
+    for doctor in doctors:
+
+        subset = schedule_df[
+            schedule_df["Doctor"] == doctor
+        ]
+
+        ax.hist(
+            subset["TimeSlot"],
+            bins=24,
+            alpha=0.5,
+            label=doctor
+        )
+
+    ax.set_title("Patient Delay Distribution by Doctor")
     ax.set_xlabel("Assigned Time Slot")
     ax.set_ylabel("Number of Patients")
+    ax.legend()
 
     return fig
